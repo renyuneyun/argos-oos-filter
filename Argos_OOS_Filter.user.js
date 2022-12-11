@@ -13,10 +13,9 @@
 // @description 2022/12/9 20:50:25
 // ==/UserScript==
 
-// TODO: optimization.
 // TODO: easier change of behaviour (remove vs dim)
 
-const MEASURE = false;
+const MEASURE = true;
 
 async function checkProductTextAndRemove(elem) {
   const promises = Array.from(elem.querySelectorAll("[data-test='component-product-card-availabilityLabel']")).map(e => {
@@ -51,9 +50,10 @@ async function main() {
   }
 }
 
-(function() {
-  // Run the filter every 1.5 seconds, because Argos only dynamically loads the availability information.
-  // TODO: optimization.
-  setInterval(main, 1500);
-})();
+var observer = new MutationObserver(function(mutations) {
+  main();
+});
 
+observer.observe(document.body, {
+  characterData: true,
+});
